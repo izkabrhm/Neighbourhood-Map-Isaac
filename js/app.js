@@ -4,7 +4,7 @@ var markers = [];
 function initMap(){
 	map = new google.maps.Map(document.getElementById('map'),{
     center:{lat: 40.732398, lng: -74.005317},
-    zoom: 10
+    zoom: 12
     });
 
     var largeInfowindow = new google.maps.InfoWindow();
@@ -31,7 +31,7 @@ function initMap(){
       	});
       	bounds.extend(markers[i].position);
 	}
-  ViewModel.showList(markers);
+  var viewModel = new ViewModel(markers);
 	map.fitBounds(bounds);
 };
 
@@ -80,13 +80,11 @@ function populateInfoWindow(marker, infowindow) {
 
 
 
-var ViewModel = function(){
+var ViewModel = function(markers){
 	var self = this;
 
-  self.showList = function(marker){
-    self.markLoc = ko.observableArray(marker);
-  }
+  self.markLoc = ko.observableArray(markers);
 }
 	
 
-ko.applyBindings(new ViewModel());
+ko.applyBindings(new ViewModel(markers));

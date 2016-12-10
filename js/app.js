@@ -3,7 +3,7 @@ var markers = [];
 
 function initMap(){
 	map = new google.maps.Map(document.getElementById('map'),{
-    center:{lat: 40.712784, lng: -74.005941},
+    center:{lat: 40.732398, lng: -74.005317},
     zoom: 10
     });
 
@@ -13,12 +13,13 @@ function initMap(){
 	for (var i = 0; i < nycLocations.length; i++) {
 		var position = nycLocations[i].latlng;
 		var title = nycLocations[i].name;
-
+    var address = nycLocations[i].address;
 
 		var marker = new google.maps.Marker({
         	map: map,
         	position: position,
         	title: title,
+          address: address,
         	animation: google.maps.Animation.DROP,
         	id: i
       	});
@@ -30,6 +31,7 @@ function initMap(){
       	});
       	bounds.extend(markers[i].position);
 	}
+  showList(markers);
 	map.fitBounds(bounds);
 };
 
@@ -53,7 +55,7 @@ function populateInfoWindow(marker, infowindow) {
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-            infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+            infowindow.setContent('<div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div>');
             var panoramaOptions = {
               position: nearStreetViewLocation,
               pov: {
@@ -79,7 +81,11 @@ function populateInfoWindow(marker, infowindow) {
 
 
 var ViewModel = function(){
-	
+	var self = this;
+
+  self.showList = function(marker){
+    self.markLoc = ko.observableArray(marker);
+  }
 }
 	
 

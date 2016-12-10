@@ -41,3 +41,7 @@ body{
 	padding: 0px;
 	width: 50px;
 }
+#pano {
+    width: 200px;
+    height: 200px;
+ }

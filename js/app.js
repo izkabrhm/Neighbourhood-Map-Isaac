@@ -31,7 +31,7 @@ function initMap(){
       	});
       	bounds.extend(markers[i].position);
 	}
-  showList(markers);
+  ViewModel.showList(markers);
 	map.fitBounds(bounds);
 };
 

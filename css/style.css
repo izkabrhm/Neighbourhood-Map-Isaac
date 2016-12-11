@@ -18,16 +18,19 @@ body{
 	width: 50%;
 	position: absolute;
 	top: 10px;
-	margin-left: 150px;
+	margin-left: 25%;
 	background-color: white;
 	display: inline;
 }
 
 .list-area{
+	margin-left:0.5%;
 	width: 20%;
+	height: 75%;
 	position: absolute;
 	top:80px;
 	background-color: white;
+	overflow-y: scroll;
 }
 
 .search-input{
@@ -40,8 +43,21 @@ body{
 	height: 30px;
 	padding: 0px;
 	width: 50px;
+	cursor: pointer;
 }
 #pano {
-    width: 200px;
+    width: 250px;
     height: 200px;
  }
+ h3{
+ 	margin: 0px;
+ }
+h4{
+	margin: 0px;
+}
+ul{
+	padding: 3px;
+}
+li{
+	padding: 2px;
+}

@@ -27,15 +27,26 @@ function initMap(){
      	markers.push(marker);
       	// Create an onclick event to open an infowindow at each marker.
       	marker.addListener('click', function() {
-        populateInfoWindow(this, largeInfowindow);
+        viewModel.populateInfoWindow(this, largeInfowindow);
       	});
       	bounds.extend(markers[i].position);
 	}
  
 	map.fitBounds(bounds);
+  ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
 };
 
-function populateInfoWindow(marker, infowindow) {
+
+
+
+
+var ViewModel = function(markers,largeInfowindow){
+	var self = this;
+  //var largeInfowindow = new google.maps.InfoWindow();
+  console.log(markers)
+  self.markLoc = ko.observableArray(markers);
+
+  self.populateInfoWindow = function(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
@@ -78,13 +89,9 @@ function populateInfoWindow(marker, infowindow) {
     }
  }
 
-
-
-var ViewModel = function(markers){
-	var self = this;
-
-  self.markLoc = ko.observableArray(markers);
+  self.listClicker = function(markLoc){
+    self.populateInfoWindow(markLoc,largeInfowindow);
+  }
 }
 	
 
-ko.applyBindings(viewModel = new ViewModel(markers));

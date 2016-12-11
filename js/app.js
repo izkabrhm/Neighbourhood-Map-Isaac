@@ -31,7 +31,7 @@ function initMap(){
       	});
       	bounds.extend(markers[i].position);
 	}
-  var viewModel = new ViewModel(markers);
+ 
 	map.fitBounds(bounds);
 };
 
@@ -87,4 +87,4 @@ var ViewModel = function(markers){
 }
 	
 
-ko.applyBindings(new ViewModel(markers));
+ko.applyBindings(viewModel = new ViewModel(markers));

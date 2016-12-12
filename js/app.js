@@ -86,8 +86,8 @@ var ViewModel = function(markers,largeInfowindow){
     }
  }
 
-  self.listClicker = function(markLoc){
-    self.populateInfoWindow(markLoc,largeInfowindow);
+  self.listClicker = function(filteredMarkLoc){
+    self.populateInfoWindow(filteredMarkLoc,largeInfowindow);
   }
 
   var searcString = self.filterLoc().toLowerCase();

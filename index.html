@@ -10,8 +10,8 @@
 			<div id="map" class="map-container"></div>
 			
 				<div class="search-area">
-					<form id="search-box" class="search-form">
-						<input type="text" name="search-string" id="search-str" class="search-input">
+					<form id="search-box" class="search-form" data-bind="submit:filterList">
+						<input data-bind="textInput: filterLoc" type="text" name="search-string" id="search-str" class="search-input">
 						<input type="submit" value="search" class="search-btn">
 					</form>
 				</div>
@@ -19,7 +19,7 @@
 			 
 				<div class="list-area">
 					<h3 class="list-title">Popular Searches</h3>
-					<ul data-bind="foreach: markLoc">
+					<ul data-bind="foreach: filteredMarkLoc">
 						<li data-bind="click: $parent.listClicker">
 							<h4 data-bind="text: $data.title"></h4>
 							<span data-bind="text: $data.address"></span>

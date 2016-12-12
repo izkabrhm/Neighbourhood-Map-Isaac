@@ -36,15 +36,12 @@ function initMap(){
   ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
 };
 
-
-
-
-
 var ViewModel = function(markers,largeInfowindow){
 	var self = this;
   //var largeInfowindow = new google.maps.InfoWindow();
-  console.log(markers)
   self.markLoc = ko.observableArray(markers);
+  self.filteredMarkLoc = ko.observableArray(markers);
+  self.filterLoc = ko.observable("");
 
   self.populateInfoWindow = function(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
@@ -91,6 +88,23 @@ var ViewModel = function(markers,largeInfowindow){
 
   self.listClicker = function(markLoc){
     self.populateInfoWindow(markLoc,largeInfowindow);
+  }
+
+  var searcString = self.filterLoc().toLowerCase();
+  var len = self.markLoc().length;
+
+  self.filterList = function(){
+    self.filteredMarkLoc([]);
+    for(var i = 0 ; i < len ; i++){
+      var markTitle = self.markLoc()[i].title().toLowerCase;
+      if(markTitle.indexOf(searchString) > -1){
+        self.filteredMarkLoc().push(self.markLoc()[i]);
+      }else {
+        // Set the map property of the marker to null so it won't be visible
+        //self.breweryList()[i].marker().setMap(null);
+      }
+    }
+
   }
 }
 	

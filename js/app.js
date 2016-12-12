@@ -100,8 +100,7 @@ var ViewModel = function(markers,largeInfowindow){
       if(markTitle.indexOf(searchString) > -1){
         self.filteredMarkLoc().push(self.markLoc()[i]);
       }else {
-        // Set the map property of the marker to null so it won't be visible
-        //self.breweryList()[i].marker().setMap(null);
+        
       }
     }
 

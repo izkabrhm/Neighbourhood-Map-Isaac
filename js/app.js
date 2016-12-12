@@ -90,17 +90,20 @@ var ViewModel = function(markers,largeInfowindow){
     self.populateInfoWindow(filteredMarkLoc,largeInfowindow);
   }
 
-  var searcString = self.filterLoc().toLowerCase();
   var len = self.markLoc().length;
 
   self.filterList = function(){
-    self.filteredMarkLoc([]);
+    var searchString = self.filterLoc();
+    var searchStr = searchString.toLowerCase();
+    self.filteredMarkLoc([])
     for(var i = 0 ; i < len ; i++){
-      var markTitle = self.markLoc()[i].title().toLowerCase;
-      if(markTitle.indexOf(searchString) > -1){
+      var markTitle = self.markLoc()[i];
+      var mark = markTitle.title.toLowerCase();
+      if(mark.indexOf(searchStr) > -1){
         self.filteredMarkLoc().push(self.markLoc()[i]);
+        self.markLoc()[i].setMap(map);
       }else {
-        
+        self.markLoc()[i].setMap(null);
       }
     }
 

@@ -18,7 +18,7 @@ body{
 .search-area{
 	width: 50%;
 	position: absolute;
-	top: 10px;
+	top: 5px;
 	margin-left: 25%;
 	background-color: white;
 	display: inline;
@@ -46,10 +46,12 @@ body{
 	width: 50px;
 	cursor: pointer;
 }
+.info{
+	height: 300px;
+	overflow-y:scroll;
+}
 .nyt{
 	width: 250px;
-	height: 150px;
-	overflow-y: scroll;
 }
 #pano {
     width: 250px;

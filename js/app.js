@@ -71,7 +71,7 @@ var ViewModel = function(markers,largeInfowindow){
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-            infowindow.setContent('<div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header">NYT Article</h4><ul id="nyt-article"></ul></div></div>');
+            infowindow.setContent('<div class="info"><div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header"></h4><ul id="nyt-article"></ul></div></div></div>');
             var panoramaOptions = {
               position: nearStreetViewLocation,
               pov: {

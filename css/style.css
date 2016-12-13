@@ -14,6 +14,7 @@ body{
 	height: 100%;
 }
 
+
 .search-area{
 	width: 50%;
 	position: absolute;
@@ -44,6 +45,11 @@ body{
 	padding: 0px;
 	width: 50px;
 	cursor: pointer;
+}
+.nyt{
+	width: 250px;
+	height: 150px;
+	overflow-y: scroll;
 }
 #pano {
     width: 250px;

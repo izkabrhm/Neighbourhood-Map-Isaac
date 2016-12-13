@@ -7,6 +7,12 @@ function initMap(){
     zoom: 12
     });
 
+  google.maps.event.addDomListener(window, "resize", function() {
+   var center = map.getCenter();
+   google.maps.event.trigger(map, "resize");
+   map.setCenter(center); 
+  });
+
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
@@ -27,11 +33,13 @@ function initMap(){
      	markers.push(marker);
       	// Create an onclick event to open an infowindow at each marker.
       	marker.addListener('click', function() {
+        map.setCenter(this.getPosition())
+        viewModel.getNYTimes(this);
         viewModel.populateInfoWindow(this, largeInfowindow);
       	});
       	bounds.extend(markers[i].position);
 	}
- 
+  //map.setCenter(bounds.getCenter());
 	map.fitBounds(bounds);
   ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
 };
@@ -63,7 +71,7 @@ var ViewModel = function(markers,largeInfowindow){
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-            infowindow.setContent('<div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div>');
+            infowindow.setContent('<div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header">NYT Article</h4><ul id="nyt-article"></ul></div></div>');
             var panoramaOptions = {
               position: nearStreetViewLocation,
               pov: {
@@ -100,14 +108,35 @@ var ViewModel = function(markers,largeInfowindow){
       var markTitle = self.markLoc()[i];
       var mark = markTitle.title.toLowerCase();
       if(mark.indexOf(searchStr) > -1){
-        self.filteredMarkLoc().push(self.markLoc()[i]);
+        self.filteredMarkLoc.push(markTitle);
         self.markLoc()[i].setMap(map);
       }else {
         self.markLoc()[i].setMap(null);
       }
     }
-
   }
+
+  self.getNYTimes = function(marker){
+    var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797'
+    $.getJSON(nytimesUrl, function(data){
+        console.log(data);
+        $('#nyt-header').text('New York Times article about ' + marker.title);
+
+        articles = data.response.docs;
+        console.log(articles.length);
+        if(articles.length!==0){
+          for(i=0 ; i<3; i++){
+              var article = articles[i];
+                $('#nyt-article').append('<li class="article">'+'<a href="'+article.web_url+'">'+article.headline.main+'</a></li>');
+          };
+        }else{
+          $('#nyt-article').append('<p class="article">No Articles found on'+marker.title+'</p>');
+        }   
+    }).error(function(e){
+        $('#nyt-header').text('New York Times article could not be loaded');
+    });
+  }
+  
 }
 	
 

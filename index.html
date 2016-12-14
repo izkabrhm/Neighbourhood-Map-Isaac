@@ -19,7 +19,7 @@
 			 
 			<div class="list-area">
 				<h2 class="list-title">Popular Searches</h2>
-				<ul data-bind="foreach: filteredMarkLoc">
+				<ul data-bind="foreach: filteredMarkLoc" class="list-nav">
 					<li data-bind="click: $parent.listClicker">
 						<h4 data-bind="text: $data.title"></h4>
 						<span data-bind="text: $data.address"></span>

@@ -153,7 +153,7 @@ var ViewModel = function(markers,largeInfowindow){
       infowindow.open(map, marker);
       // Make sure the marker property is cleared if the infowindow is closed.
       infowindow.addListener('closeclick',function(){
-        infowindow.setMarker(null);
+        infowindow.setMarker = null;
       });
       var streetViewService = new google.maps.StreetViewService();
       var radius = 50;

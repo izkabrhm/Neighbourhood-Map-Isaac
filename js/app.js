@@ -2,9 +2,102 @@ var map;
 var markers = [];
 
 function initMap(){
+  var styles = [
+    {
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "color": "#365779"
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "color": "#042E58"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "stylers": [
+            {
+                "color": "#A51A1D"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "stylers": [
+            {
+                "color": "#808080"
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "stylers": [
+            {
+                "color": "#808080"
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            },
+            {
+                "weight": 0.1
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "stylers": [
+            {
+                "color": "#365779"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            }
+        ]
+    },
+    {
+        "featureType": "water"
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "color": "#365779"
+            }
+        ]
+    }  
+];
+
 	map = new google.maps.Map(document.getElementById('map'),{
     center:{lat: 40.732398, lng: -74.005317},
-    zoom: 12
+    zoom: 12,
+    styles: styles,
+    mapTypeControl: false
     });
 
   google.maps.event.addDomListener(window, "resize", function() {
@@ -16,7 +109,7 @@ function initMap(){
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
 
-	for (var i = 0; i < nycLocations.length; i++) {
+	 for (var i = 0; i < nycLocations.length; i++) {
 		var position = nycLocations[i].latlng;
 		var title = nycLocations[i].name;
     var address = nycLocations[i].address;
@@ -33,9 +126,10 @@ function initMap(){
      	markers.push(marker);
       	// Create an onclick event to open an infowindow at each marker.
       	marker.addListener('click', function() {
-        map.setCenter(this.getPosition())
-        viewModel.getNYTimes(this);
-        viewModel.populateInfoWindow(this, largeInfowindow);
+          map.setCenter(this.getPosition());
+          viewModel.markerAnimation(this);
+          viewModel.getNYTimes(this);
+          viewModel.populateInfoWindow(this, largeInfowindow);
       	});
       	bounds.extend(markers[i].position);
 	}
@@ -95,6 +189,8 @@ var ViewModel = function(markers,largeInfowindow){
  }
 
   self.listClicker = function(filteredMarkLoc){
+    self.getNYTimes(this);
+    self.markerAnimation(this);
     self.populateInfoWindow(filteredMarkLoc,largeInfowindow);
   }
 
@@ -135,6 +231,11 @@ var ViewModel = function(markers,largeInfowindow){
     }).error(function(e){
         $('#nyt-header').text('New York Times article could not be loaded');
     });
+  }
+
+  self.markerAnimation = function(marker){
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout( function() { marker.setAnimation(null); }, 750);
   }
   
 }

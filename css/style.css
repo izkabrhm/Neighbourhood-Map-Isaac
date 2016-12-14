@@ -16,10 +16,10 @@ body{
 
 
 .search-area{
-	width: 50%;
+	width: 360px;
 	position: absolute;
 	top: 5px;
-	margin-left: 25%;
+	margin-left: 0.5%;
 	background-color: white;
 	display: inline;
 }
@@ -29,13 +29,13 @@ body{
 	width: 20%;
 	height: 60%;
 	position: absolute;
-	top:80px;
+	top: 120px;
 	background-color: white;
 	overflow-y: scroll;
 }
 
 .search-input{
-	width: 85%;
+	width: 75%;
 	margin-top: 15px;
 	margin-left: 15px;
 	height: 30px;
@@ -47,15 +47,21 @@ body{
 	cursor: pointer;
 }
 .info{
-	height: 300px;
+	height: 250px;
 	overflow-y:scroll;
 }
 .nyt{
 	width: 250px;
 }
+.article{
+	padding: 3px;
+}
 #pano {
     width: 250px;
-    height: 200px;
+    height: 175px;
+ }
+ #nyt-article{
+ 	margin: 1px;
  }
  h3{
  	margin: 0px;

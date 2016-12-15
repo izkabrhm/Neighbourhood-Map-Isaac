@@ -14,9 +14,8 @@ body{
 	height: 100%;
 }
 
-
 .search-area{
-	width: 400px;
+	width: 25%;
 	position: absolute;
 	top: 5px;
 	margin-left: 0.5%;
@@ -26,7 +25,7 @@ body{
 
 .list-area{
 	margin-left:0.5%;
-	width: 390px;
+	width: 27%;
 	height: 500px;
 	border-radius: 3px;
 	position: absolute;
@@ -59,6 +58,7 @@ body{
 	
 }
 
+    /*----------------CSS for Search Form---------------------*/
 .cf:before, .cf:after{
       content:"";
       display:table;
@@ -72,10 +72,10 @@ body{
       zoom:1;
     }
 
-    /*----------------CSS for Search Form---------------------*/	
+	
     
     .form-wrapper {
-        width: 360px;
+        width: 100%;
         padding: 15px;
         position: absolute;
         background: #444;
@@ -89,7 +89,7 @@ body{
     }
     
     .form-wrapper input {
-        width: 280px;
+        width: 80%;
         height: 40px;
         padding: 10px 5px;
         float: left;    
@@ -135,8 +135,8 @@ body{
         padding: 0;
         cursor: pointer;
         height: 40px;
-        width: 80px;
-        font: bold 15px/40px 'lucida sans', 'trebuchet MS', 'Tahoma';
+        width: 20%;
+        font: bold 10px/40px 'lucida sans', 'trebuchet MS', 'Tahoma';
         color: #fff;
         text-transform: uppercase;
         background: #d83c3c;
@@ -184,16 +184,20 @@ body{
 	height: 250px;
 	overflow-y:scroll;
 }
+
 .nyt{
 	width: 250px;
 }
+
 .article{
 	padding: 3px;
 }
+
 #pano {
     width: 250px;
     height: 175px;
  }
+
  #nyt-article{
  	margin: 1px;
  }
@@ -222,12 +226,19 @@ body{
   	cursor: pointer;
 }
 
+.list-font{
+    padding: 7px;
+
+}
+
  h3{
  	margin: 0px;
  }
+
 h4{
 	margin: 0px;
 }
+
 ul{
 	padding: 3px;
 }
@@ -236,26 +247,25 @@ button {
     -webkit-appearance: button;
 }
 
-.list-font{
-	padding: 7px;
 
-}
 
 @media only screen and (max-width: 768px){
-	/*.list-area{
-		width: 100%;
-		height: 25%;
-		position: absolute;
-		bottom: 3.5%;
-	}
-	.list-nav{
-		height: 50%;
-
-	}*/
 	.mobile-nav{
 		display: block;	
 	}
 	.list-area{
 		display: none;
 	}
+    .search-area{
+        width: 285px;
+    }
+    .form-wrapper{
+        width: 285px;
+    }
+    .form-wrapper input{
+        width: 200px;
+    }
+    .form-wrapper button{
+        width: 75px;
+    }
 }

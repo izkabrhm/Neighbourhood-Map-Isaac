@@ -233,7 +233,7 @@ var ViewModel = function(markers,largeInfowindow){
         articles = data.response.docs;
         console.log(articles.length);
         if(articles.length!==0){
-          for(i=0 ; i<3; i++){
+          for(i=0 ; i<articles.length; i++){
               var article = articles[i];
                 $('#nyt-article').append('<li class="article">'+'<a href="'+article.web_url+'">'+article.headline.main+'</a></li>');
           };

@@ -20,3 +20,14 @@ Users can filter the list of locations based on location name. When searching, y
 
 NY Times api is used to provide news article for each location name. The content will be displayed in infowindow of the marker with a link to the new article site
 
+#### References
+
+[Knockout Documentation](http://knockoutjs.com/documentation/introduction.html)
+
+[Google Map API](https://developers.google.com/maps/documentation/javascript/tutorial)
+
+[Foursquare API](https://developer.foursquare.com)
+
+[Udacity Intro to Ajax](https://www.udacity.com/course/ud110)
+
+[DawoonC's DW Neighborrhood](https://github.com/DawoonC/dw-neighborhood)

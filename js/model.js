@@ -21,17 +21,17 @@ var nycLocations = [
 	},
 	{
 		name: 'McGees Pub',
-		latlng: {lat: 40.712784, lng: -74.005941},
+		latlng: {lat: 40.7650, lng: -73.9829},
 		address: '240 W 55th St, New York, NY 10019, USA'
 	},
 	{
 		name: 'Pulitzer Fountain',
-		latlng: {lat: 40.712784, lng: -74.005941},
+		latlng: {lat: 40.7641, lng: -73.9736},
 		address: 'New York, NY 10019, USA'
 	},
 	{
 		name: 'Central Perk Cafe',
-		latlng: {lat: 40.712784, lng: -74.005941},
+		latlng: {lat: 40.7829, lng: -73.9654},
 		address: '105 Cedarhust Ave, Cedarhust, NY 11516, USA'
 	},
 	{

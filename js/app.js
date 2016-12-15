@@ -1,7 +1,11 @@
+//Initialize the map
 var map;
+//Initialize markers
 var markers = [];
 
+//Calling initMap() to display map and markers
 function initMap(){
+  //Style given to map
   var styles = [
     {
         "elementType": "labels.icon",
@@ -93,6 +97,7 @@ function initMap(){
     }  
 ];
 
+  //Setting the map
 	map = new google.maps.Map(document.getElementById('map'),{
     center:{lat: 40.732398, lng: -74.005317},
     zoom: 12,
@@ -100,41 +105,44 @@ function initMap(){
     mapTypeControl: false
     });
 
+  //This Listener is called to resize and center the map to a specific marker
   google.maps.event.addDomListener(window, "resize", function() {
    var center = map.getCenter();
    google.maps.event.trigger(map, "resize");
    map.setCenter(center); 
   });
 
-    var largeInfowindow = new google.maps.InfoWindow();
-    var bounds = new google.maps.LatLngBounds();
+  //Initialize the infoWindow
+  var largeInfowindow = new google.maps.InfoWindow();
+  var bounds = new google.maps.LatLngBounds();
 
-	 for (var i = 0; i < nycLocations.length; i++) {
-		var position = nycLocations[i].latlng;
-		var title = nycLocations[i].name;
-    var address = nycLocations[i].address;
+ for (var i = 0; i < nycLocations.length; i++) {
+	var position = nycLocations[i].latlng;
+	var title = nycLocations[i].name;
+  var address = nycLocations[i].address;
 
-		var marker = new google.maps.Marker({
-        	map: map,
-        	position: position,
-        	title: title,
-          address: address,
-        	animation: google.maps.Animation.DROP,
-        	id: i
-      	});
-      	// Push the marker to our array of markers.
-     	markers.push(marker);
-      	// Create an onclick event to open an infowindow at each marker.
-      	marker.addListener('click', function() {
-          map.setCenter(this.getPosition());
-          viewModel.markerAnimation(this);
-          viewModel.getNYTimes(this);
-          viewModel.populateInfoWindow(this, largeInfowindow);
-      	});
-      	bounds.extend(markers[i].position);
+	var marker = new google.maps.Marker({
+      	map: map,
+      	position: position,
+      	title: title,
+        address: address,
+      	animation: google.maps.Animation.DROP,
+      	id: i
+    	});
+    	// Push the marker to our array of markers.
+   	markers.push(marker);
+    	// Create an onclick event to open an infowindow at each marker.
+    	marker.addListener('click', function() {
+        map.setCenter(this.getPosition());
+        viewModel.markerAnimation(this);
+        viewModel.getNYTimes(this);
+        viewModel.populateInfoWindow(this, largeInfowindow);
+    	});
+    	bounds.extend(markers[i].position);
 	}
   //map.setCenter(bounds.getCenter());
 	map.fitBounds(bounds);
+  //Kick starts everything!
   ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
 };
 
@@ -145,6 +153,7 @@ var ViewModel = function(markers,largeInfowindow){
   self.filteredMarkLoc = ko.observableArray(markers);
   self.filterLoc = ko.observable("");
 
+  //Function used to create content for infowindow
   self.populateInfoWindow = function(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
@@ -188,6 +197,7 @@ var ViewModel = function(markers,largeInfowindow){
     }
  }
 
+ //Sets up an event listener for clicking a list element
   self.listClicker = function(filteredMarkLoc){
     self.getNYTimes(this);
     self.markerAnimation(this);
@@ -196,6 +206,7 @@ var ViewModel = function(markers,largeInfowindow){
 
   var len = self.markLoc().length;
 
+  //Sets up an event listener for filtering the list after search form is clicked
   self.filterList = function(){
     var searchString = self.filterLoc();
     var searchStr = searchString.toLowerCase();
@@ -212,6 +223,7 @@ var ViewModel = function(markers,largeInfowindow){
     }
   }
 
+  //Function to retrieve data from New York Times sites through NY Times API
   self.getNYTimes = function(marker){
     var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797'
     $.getJSON(nytimesUrl, function(data){
@@ -233,6 +245,7 @@ var ViewModel = function(markers,largeInfowindow){
     });
   }
 
+  //Animates marker when it is clicked
   self.markerAnimation = function(marker){
       marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout( function() { marker.setAnimation(null); }, 750);

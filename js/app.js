@@ -135,8 +135,8 @@ function initMap(){
     	marker.addListener('click', function() {
         map.setCenter(this.getPosition());
         viewModel.markerAnimation(this);
-        viewModel.getNYTimes(this);
-        viewModel.populateInfoWindow(this, largeInfowindow);
+        viewModel.getNYTimes(this, largeInfowindow);
+        //viewModel.populateInfoWindow(this, largeInfowindow);
     	});
     	bounds.extend(markers[i].position);
 	}
@@ -144,7 +144,7 @@ function initMap(){
 	map.fitBounds(bounds);
   //Kick starts everything!
   ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
-};
+}
 
 var ViewModel = function(markers,largeInfowindow){
 	var self = this;
@@ -154,7 +154,7 @@ var ViewModel = function(markers,largeInfowindow){
   self.filterLoc = ko.observable("");
 
   //Function used to create content for infowindow
-  self.populateInfoWindow = function(marker, infowindow) {
+  self.populateInfoWindow = function(marker, infowindow,articleHeader, artContent) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
@@ -174,7 +174,7 @@ var ViewModel = function(markers,largeInfowindow){
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-            infowindow.setContent('<div class="info"><div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header"></h4><ul id="nyt-article"></ul></div></div></div>');
+            infowindow.setContent('<div class="info"><div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header">'+articleHeader+'</h4><ul id="nyt-article">'+artContent+'</ul></div></div></div>');
             var panoramaOptions = {
               position: nearStreetViewLocation,
               pov: {
@@ -195,14 +195,14 @@ var ViewModel = function(markers,largeInfowindow){
       // Open the infowindow on the correct marker.
       infowindow.open(map, marker);
     }
- }
+ };
 
  //Sets up an event listener for clicking a list element
   self.listClicker = function(filteredMarkLoc){
     self.getNYTimes(this);
     self.markerAnimation(this);
     self.populateInfoWindow(filteredMarkLoc,largeInfowindow);
-  }
+  };
 
   var len = self.markLoc().length;
 
@@ -216,41 +216,65 @@ var ViewModel = function(markers,largeInfowindow){
       var mark = markTitle.title.toLowerCase();
       if(mark.indexOf(searchStr) > -1){
         self.filteredMarkLoc.push(markTitle);
-        self.markLoc()[i].setMap(map);
+        self.markLoc()[i].setVisible(true);
       }else {
-        self.markLoc()[i].setMap(null);
+        self.markLoc()[i].setVisible(false);
       }
     }
-  }
+  };
 
+  
   //Function to retrieve data from New York Times sites through NY Times API
-  self.getNYTimes = function(marker){
+  self.getNYTimes = function(marker,largeInfowindow){
     var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797'
     $.getJSON(nytimesUrl, function(data){
+        self.articleContent = ko.observableArray([]);
         console.log(data);
-        $('#nyt-header').text('New York Times article about ' + marker.title);
-
+        var articleHeader = 'New York Times article about'+marker.title;
         articles = data.response.docs;
         console.log(articles.length);
         if(articles.length!==0){
           for(i=0 ; i<articles.length; i++){
               var article = articles[i];
-                $('#nyt-article').append('<li class="article">'+'<a href="'+article.web_url+'">'+article.headline.main+'</a></li>');
-          };
+              var art = '<li class="article"><a href="'+article.web_url+'">'+article.headline.main+'</a></li>';
+              self.articleContent.push(art);
+          }
         }else{
-          $('#nyt-article').append('<p class="article">No Articles found on'+marker.title+'</p>');
-        }   
+          console.log('why')
+          art = '<p class="article">No Articles found on'+marker.title+'</p>'
+          self.articleContent.push(art);
+        }
+        var artContent = self.articleContent();
+        console.log(artContent);
+        self.populateInfoWindow(marker,largeInfowindow,articleHeader,artContent)   
     }).error(function(e){
-        $('#nyt-header').text('New York Times article could not be loaded');
+        //$('#nyt-header').text('New York Times article could not be loaded');
+        articleHeader = 'New York Times article could not be loaded';
+        artContent = '';
+        self.populateInfoWindow(marker,largeInfowindow,articleHeader,artContent);
     });
-  }
+  };
 
   //Animates marker when it is clicked
   self.markerAnimation = function(marker){
       marker.setAnimation(google.maps.Animation.BOUNCE);
       setTimeout( function() { marker.setAnimation(null); }, 750);
-  }
+  };
   
+}
+
+googleError = function(){
+  var string = msg.toLowerCase();
+    var substring = "script error";
+    if (string.indexOf(substring) > -1){
+        alert('Script Error: See Browser Console for Detail');
+    } else {
+        
+
+        alert("error");
+    }
+
+    return false;
 }
 	
 

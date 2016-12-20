@@ -13,23 +13,23 @@
 			<div class="search-area">
 				<form id="search-box" class="form-wrapper cf" data-bind="submit:filterList">
 					<input data-bind="textInput: filterLoc" type="text" placeholder="Enter place" name="search-string" id="search-str" class="search-input">
-					<button type="submit" class="">Search</button>
+
 				</form>
 			</div>
 			
 			 
-			<div class="list-area">
+			<nav class="list-area">
 				<h2 class="list-font">Popular Searches</h2>
-				<ul data-bind="foreach: filteredMarkLoc" class="list-nav">
+				<ul data-bind="foreach: filterList" class="list-nav">
 					<li data-bind="click: $parent.listClicker" class="list-font list">
 						
 						<h4 data-bind="text: $data.title"></h4>
 						<span data-bind="text: $data.address"></span>
 					</li>
 				</ul>
-			</div>
+			</nav>
 
-			<div class="mobile-nav">
+			<nav class="mobile-nav">
 				<ul data-bind="foreach: filteredMarkLoc">
 					<li data-bind="click: $parent.listClicker" class="list-font mobile-list">
 						
@@ -37,7 +37,7 @@
 						<span data-bind="text: $data.address"></span>
 					</li>
 				</ul>
-			</div>
+			</nav>
 			
 		</div>
 	<script src="js/model.js"></script>

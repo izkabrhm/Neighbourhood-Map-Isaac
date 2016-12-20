@@ -154,7 +154,7 @@ var ViewModel = function(markers,largeInfowindow){
   self.filterLoc = ko.observable("");
 
   //Function used to create content for infowindow
-  self.populateInfoWindow = function(marker, infowindow,articleHeader, artContent) {
+  self.populateInfoWindow = function(marker, infowindow,articleHeader, articleContent) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
       infowindow.marker = marker;
@@ -174,7 +174,7 @@ var ViewModel = function(markers,largeInfowindow){
           var nearStreetViewLocation = data.location.latLng;
           var heading = google.maps.geometry.spherical.computeHeading(
             nearStreetViewLocation, marker.position);
-            infowindow.setContent('<div class="info"><div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header">'+articleHeader+'</h4><ul id="nyt-article">'+artContent+'</ul></div></div></div>');
+            infowindow.setContent('<div class="info"><div><h3>' + marker.title + '</h3><p>'+marker.address+'</p></div><div id="pano"></div><br><div class="nyt"><h4 id="nyt-header">'+articleHeader+'</h4><ul id="nyt-article">'+articleContent+'</ul></div></div></div>');
             var panoramaOptions = {
               position: nearStreetViewLocation,
               pov: {
@@ -206,10 +206,13 @@ var ViewModel = function(markers,largeInfowindow){
   var len = self.markLoc().length;
 
   //Sets up an event listener for filtering the list after search form is clicked
-  self.filterList = function(){
+  self.filterList = ko.computed(function(){
     var searchString = self.filterLoc();
     var searchStr = searchString.toLowerCase();
-    self.filteredMarkLoc([])
+    console.log(self.filteredMarkLoc);
+    if(!self.filteredMarkLoc()){
+      return self.filteredMarkLoc;
+    }
     for(var i = 0 ; i < len ; i++){
       var markTitle = self.markLoc()[i];
       var mark = markTitle.title.toLowerCase();
@@ -220,14 +223,15 @@ var ViewModel = function(markers,largeInfowindow){
         self.markLoc()[i].setVisible(false);
       }
     }
-  };
+    return self.filteredMarkLoc;
+  });
 
   
   //Function to retrieve data from New York Times sites through NY Times API
   self.getNYTimes = function(marker,largeInfowindow){
     var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797'
     $.getJSON(nytimesUrl, function(data){
-        var articleContent = [];
+        var articleContent = '';
         console.log(data);
         var articleHeader = 'New York Times article about'+marker.title;
         articles = data.response.docs;
@@ -236,12 +240,11 @@ var ViewModel = function(markers,largeInfowindow){
           for(i=0 ; i<articles.length; i++){
               var article = articles[i];
               var art = '<li class="article"><a href="'+article.web_url+'">'+article.headline.main+'</a></li>';
-              articleContent.push(art);
+              articleContent = articleContent.concat(art);
           }
         }else{
-          console.log('why')
-          art = '<p class="article">No Articles found on'+marker.title+'</p>'
-          articleContent.push(art);
+          art = '<p class="article">No Articles found on'+marker.title+'</p>';
+          articleContent = articleContent.concat(art);
         }
         console.log(articleContent);
         self.populateInfoWindow(marker,largeInfowindow,articleHeader,articleContent)   

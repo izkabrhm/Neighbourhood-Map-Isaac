@@ -199,9 +199,8 @@ var ViewModel = function(markers,largeInfowindow){
 
  //Sets up an event listener for clicking a list element
   self.listClicker = function(filteredMarkLoc){
-    self.getNYTimes(this);
+    self.getNYTimes(this,largeInfowindow);
     self.markerAnimation(this);
-    self.populateInfoWindow(filteredMarkLoc,largeInfowindow);
   };
 
   var len = self.markLoc().length;
@@ -228,7 +227,7 @@ var ViewModel = function(markers,largeInfowindow){
   self.getNYTimes = function(marker,largeInfowindow){
     var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797'
     $.getJSON(nytimesUrl, function(data){
-        self.articleContent = ko.observableArray([]);
+        var articleContent = [];
         console.log(data);
         var articleHeader = 'New York Times article about'+marker.title;
         articles = data.response.docs;
@@ -237,21 +236,20 @@ var ViewModel = function(markers,largeInfowindow){
           for(i=0 ; i<articles.length; i++){
               var article = articles[i];
               var art = '<li class="article"><a href="'+article.web_url+'">'+article.headline.main+'</a></li>';
-              self.articleContent.push(art);
+              articleContent.push(art);
           }
         }else{
           console.log('why')
           art = '<p class="article">No Articles found on'+marker.title+'</p>'
-          self.articleContent.push(art);
+          articleContent.push(art);
         }
-        var artContent = self.articleContent();
-        console.log(artContent);
-        self.populateInfoWindow(marker,largeInfowindow,articleHeader,artContent)   
+        console.log(articleContent);
+        self.populateInfoWindow(marker,largeInfowindow,articleHeader,articleContent)   
     }).error(function(e){
         //$('#nyt-header').text('New York Times article could not be loaded');
         articleHeader = 'New York Times article could not be loaded';
-        artContent = '';
-        self.populateInfoWindow(marker,largeInfowindow,articleHeader,artContent);
+        articleContent = '';
+        self.populateInfoWindow(marker,largeInfowindow,articleHeader,articleContent);
     });
   };
 
@@ -263,18 +261,10 @@ var ViewModel = function(markers,largeInfowindow){
   
 }
 
-googleError = function(){
-  var string = msg.toLowerCase();
-    var substring = "script error";
-    if (string.indexOf(substring) > -1){
-        alert('Script Error: See Browser Console for Detail');
-    } else {
-        
+var googleError = function(){
 
-        alert("error");
-    }
-
-    return false;
+    alert("Your Google API Key is not valid");
+    
 }
 	
 

@@ -1,3 +1,4 @@
+'use strict'
 //Initialize the map
 var map;
 //Initialize markers
@@ -143,6 +144,7 @@ function initMap(){
   //map.setCenter(bounds.getCenter());
 	map.fitBounds(bounds);
   //Kick starts everything!
+  var viewModel
   ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
 }
 
@@ -150,8 +152,8 @@ var ViewModel = function(markers,largeInfowindow){
 	var self = this;
   //var largeInfowindow = new google.maps.InfoWindow();
   self.markLoc = ko.observableArray(markers);
-  self.filteredMarkLoc = ko.observableArray(markers);
-  self.filterLoc = ko.observable("");
+  self.filteredMarkLoc = ko.observableArray();
+  self.filterLoc = ko.observable('');
 
   //Function used to create content for infowindow
   self.populateInfoWindow = function(marker, infowindow,articleHeader, articleContent) {
@@ -209,21 +211,24 @@ var ViewModel = function(markers,largeInfowindow){
   self.filterList = ko.computed(function(){
     var searchString = self.filterLoc();
     var searchStr = searchString.toLowerCase();
-    console.log(self.filteredMarkLoc);
-    if(!self.filteredMarkLoc()){
-      return self.filteredMarkLoc;
-    }
-    for(var i = 0 ; i < len ; i++){
-      var markTitle = self.markLoc()[i];
-      var mark = markTitle.title.toLowerCase();
-      if(mark.indexOf(searchStr) > -1){
-        self.filteredMarkLoc.push(markTitle);
-        self.markLoc()[i].setVisible(true);
-      }else {
-        self.markLoc()[i].setVisible(false);
+    console.log(searchString);
+    if(!self.filterLoc()){
+      console.log("work")
+      console.log(self.filteredMarkLoc);
+      return self.markLoc();
+    }else{
+      for(var i = 0 ; i < len ; i++){
+        var markTitle = self.markLoc()[i];
+        var mark = markTitle.title.toLowerCase();
+        if(mark.indexOf(searchStr) > -1){
+          self.filteredMarkLoc.push(markTitle);
+          self.markLoc()[i].setVisible(true);
+        }else {
+          self.markLoc()[i].setVisible(false);
+        }
       }
+      return self.filteredMarkLoc();
     }
-    return self.filteredMarkLoc;
   });
 
   
@@ -234,10 +239,10 @@ var ViewModel = function(markers,largeInfowindow){
         var articleContent = '';
         console.log(data);
         var articleHeader = 'New York Times article about'+marker.title;
-        articles = data.response.docs;
+        var articles = data.response.docs;
         console.log(articles.length);
         if(articles.length!==0){
-          for(i=0 ; i<articles.length; i++){
+          for(var i=0 ; i<articles.length; i++){
               var article = articles[i];
               var art = '<li class="article"><a href="'+article.web_url+'">'+article.headline.main+'</a></li>';
               articleContent = articleContent.concat(art);

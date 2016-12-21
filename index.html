@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Neighbourhood Map</title>
+		<title>Neighborhood Map</title>
 		<link rel="stylesheet" href="css/style.css">
 		<link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,13 +11,15 @@
 			<div id="map" class="map-container"></div>
 			
 			<div class="search-area">
-				<form id="search-box" class="form-wrapper cf" data-bind="submit:filterList">
+				<form id="search-box" class="form-wrapper cf">
 					<input data-bind="textInput: filterLoc" type="text" placeholder="Enter place" name="search-string" id="search-str" class="search-input">
 
 				</form>
 			</div>
 			
-			 
+			<header>
+				<h1 class="list-font head">Neighborhood Map</h1>
+			</header>
 			<nav class="list-area">
 				<h2 class="list-font">Popular Searches</h2>
 				<ul data-bind="foreach: filterList" class="list-nav">
@@ -30,7 +32,8 @@
 			</nav>
 
 			<nav class="mobile-nav">
-				<ul data-bind="foreach: filteredMarkLoc">
+				<h3 class="list-font">Neighborhood Map</h3>
+				<ul data-bind="foreach: filterList" class="mob">
 					<li data-bind="click: $parent.listClicker" class="list-font mobile-list">
 						
 						<h4 data-bind="text: $data.title"></h4>

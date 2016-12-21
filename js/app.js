@@ -1,8 +1,6 @@
-'use strict'
+'use strict';
 //Initialize the map
 var map;
-//Initialize markers
-var markers = [];
 
 //Calling initMap() to display map and markers
 function initMap(){
@@ -23,7 +21,7 @@ function initMap(){
         "featureType": "landscape",
         "stylers": [
             {
-                "color": "#042E58"
+                "color": "#042e58"
             }
         ]
     },
@@ -31,7 +29,7 @@ function initMap(){
         "featureType": "road.highway",
         "stylers": [
             {
-                "color": "#A51A1D"
+                "color": "#a51a1d"
             }
         ]
     },
@@ -96,7 +94,7 @@ function initMap(){
             }
         ]
     }  
-];
+  ];
 
   //Setting the map
 	map = new google.maps.Map(document.getElementById('map'),{
@@ -107,11 +105,14 @@ function initMap(){
     });
 
   //This Listener is called to resize and center the map to a specific marker
-  google.maps.event.addDomListener(window, "resize", function() {
+  google.maps.event.addDomListener(window, 'resize', function() {
    var center = map.getCenter();
-   google.maps.event.trigger(map, "resize");
+   google.maps.event.trigger(map, 'resize');
    map.setCenter(center); 
   });
+
+  //Initialize markers
+  var markers = [];
 
   //Initialize the infoWindow
   var largeInfowindow = new google.maps.InfoWindow();
@@ -137,14 +138,13 @@ function initMap(){
         map.setCenter(this.getPosition());
         viewModel.markerAnimation(this);
         viewModel.getNYTimes(this, largeInfowindow);
-        //viewModel.populateInfoWindow(this, largeInfowindow);
     	});
     	bounds.extend(markers[i].position);
 	}
   //map.setCenter(bounds.getCenter());
 	map.fitBounds(bounds);
   //Kick starts everything!
-  var viewModel
+  var viewModel;
   ko.applyBindings(viewModel = new ViewModel(markers,largeInfowindow));
 }
 
@@ -205,18 +205,21 @@ var ViewModel = function(markers,largeInfowindow){
     self.markerAnimation(this);
   };
 
-  var len = self.markLoc().length;
+  
 
   //Sets up an event listener for filtering the list after search form is clicked
   self.filterList = ko.computed(function(){
+    self.filteredMarkLoc.removeAll();
     var searchString = self.filterLoc();
     var searchStr = searchString.toLowerCase();
+    var len = self.markLoc().length;
     console.log(searchString);
     if(!self.filterLoc()){
-      console.log("work")
-      console.log(self.filteredMarkLoc);
+      for(var i = 0 ; i < len ; i++){
+        self.markLoc()[i].setVisible(true);
+      }
       return self.markLoc();
-    }else{
+    }else{    
       for(var i = 0 ; i < len ; i++){
         var markTitle = self.markLoc()[i];
         var mark = markTitle.title.toLowerCase();
@@ -230,11 +233,10 @@ var ViewModel = function(markers,largeInfowindow){
       return self.filteredMarkLoc();
     }
   });
-
-  
+ 
   //Function to retrieve data from New York Times sites through NY Times API
   self.getNYTimes = function(marker,largeInfowindow){
-    var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797'
+    var nytimesUrl = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q=' + marker.title + '&sort=newest&api-key=a2b419fa02c746609c8d9f045104b797';
     $.getJSON(nytimesUrl, function(data){
         var articleContent = '';
         console.log(data);
@@ -251,8 +253,7 @@ var ViewModel = function(markers,largeInfowindow){
           art = '<p class="article">No Articles found on'+marker.title+'</p>';
           articleContent = articleContent.concat(art);
         }
-        console.log(articleContent);
-        self.populateInfoWindow(marker,largeInfowindow,articleHeader,articleContent)   
+        self.populateInfoWindow(marker,largeInfowindow,articleHeader,articleContent);   
     }).error(function(e){
         //$('#nyt-header').text('New York Times article could not be loaded');
         articleHeader = 'New York Times article could not be loaded';
@@ -264,15 +265,12 @@ var ViewModel = function(markers,largeInfowindow){
   //Animates marker when it is clicked
   self.markerAnimation = function(marker){
       marker.setAnimation(google.maps.Animation.BOUNCE);
-      setTimeout( function() { marker.setAnimation(null); }, 750);
+      setTimeout( function() { marker.setAnimation(null); }, 1400);
   };
-  
-}
+};
 
 var googleError = function(){
-
     alert("Your Google API Key is not valid");
-    
-}
+};
 	
 

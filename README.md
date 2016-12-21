@@ -26,7 +26,7 @@ NY Times api is used to provide news article for each location name. The content
 
 [Google Map API](https://developers.google.com/maps/documentation/javascript/tutorial)
 
-[Foursquare API](https://developer.foursquare.com)
+[New York Times API](https://developer.nytimes.com)
 
 [Udacity Intro to Ajax](https://www.udacity.com/course/ud110)
 
